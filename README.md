@@ -46,3 +46,5 @@
 
 ## Инструкции и помощь
 Подробные инструкции по настройке, использованию и дополнительным функциям доступны в [блоге](https://mishatugushev.ru/blog/?go=all/shadowrocket-seamless). Поддержать проект можно на [Бусти](https://boosty.to/misha_tgshv/donate?ref=github).
+
+Перед подготовкой pull request ознакомьтесь с [CONTRIBUTING.md](CONTRIBUTING.md).
