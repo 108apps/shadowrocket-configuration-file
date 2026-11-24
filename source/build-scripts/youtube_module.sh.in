@@ -1,0 +1,4 @@
+curl -sSL https://raw.githubusercontent.com/YanbingJiang/Shadowrocket_diy_rules/refs/heads/main/Modules/YT-Premium-V1.module \
+  | sed -E 's/captionLang:zh-Hans/captionLang:off/g; s/lyricLang:zh-Hans/lyricLang:off/g' \
+  | sed "1i# Last modified youtube.response.js: ${{ env.YT_SCRIPT_DATE }}" \
+  | sed "1i# Last modified YT-Premium-V1: ${{ env.YT_MODULE_DATE }}" > modules/YT-Premium-V1-RU.module
