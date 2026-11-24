@@ -23,10 +23,10 @@ jobs:
             repos/${{ github.repository }}/merge-upstream \
             -f branch=main
 
-      - name: Merge main into 'main-with-fork-ci' branch
-        run: |
-          gh api \
-            --method POST \
-            repos/${{ github.repository }}/merges \
-            -f base=main-with-fork-ci \
-            -f head=main
+#      - name: Merge main into 'main-with-fork-ci' branch
+#        run: |
+#          gh api \
+#            --method POST \
+#            repos/${{ github.repository }}/merges \
+#            -f base=main-with-fork-ci \
+#            -f head=main
