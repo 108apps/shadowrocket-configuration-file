@@ -1,0 +1,32 @@
+name: Sync fork with parent repository
+
+on:
+  schedule:
+    - cron: '15 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+
+    steps:
+      - name: Sync main with parent repository
+        run: |
+          gh api \
+            --method POST \
+            repos/${{ github.repository }}/merge-upstream \
+            -f branch=main
+
+#      - name: Merge main into 'main-with-fork-ci' branch
+#        run: |
+#          gh api \
+#            --method POST \
+#            repos/${{ github.repository }}/merges \
+#            -f base=main-with-fork-ci \
+#            -f head=main
