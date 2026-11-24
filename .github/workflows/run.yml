@@ -270,7 +270,7 @@ jobs:
 
       # --- Генерация конфигов ---
       - name: Собираем профили Shadowrocket
-        run: ./build-local.sh conf
+        run: ./build.sh conf
 
       # --- Коммитим и пушим ---
       - name: Настраиваем git
