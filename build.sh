@@ -38,32 +38,38 @@ done
 # Создаём папку для готовых профилей. С ключом -p команда сработает и для существующей папки.
 mkdir -p conf
 
+now_ms() {
+  local nanoseconds
+  nanoseconds=$(date +%s%N)
+  echo "$((nanoseconds / 1000000))"
+}
+
 build_profile() {
-  local profile=$1
-  echo "Сборка ${profile}.conf"
-  # Запускаем скрипт с именем профиля в отдельном Bash.
-  # Передаём -e и ему, чтобы ошибка в генераторе прервала сборку.
-  bash -e "source/build-scripts/${profile}.sh"
+  local start_ms end_ms
+  start_ms=$(now_ms)
+  bash -e "source/build-scripts/$1.sh"
+  end_ms=$(now_ms)
+  printf '  Время сборки: %d ms\n\n' "$((end_ms - start_ms))"
 }
 
 # --- Генерация конфигов ---
-# Создаем sr_ru_basic.conf с заменой update-url в копии general
+echo "Создаем sr_ru_basic.conf с заменой update-url в копии general"
 build_profile sr_ru_basic
 
-# Создаем sr_ru_whitelist.conf с заменой update-url в копии general
+echo "Создаем sr_ru_whitelist.conf с заменой update-url в копии general"
 build_profile sr_ru_whitelist
 
-# Создаем sr_ru_keen.conf с заменой update-url в копии general
+echo "Создаем sr_ru_keen.conf с заменой update-url в копии general"
 build_profile sr_ru_keen
 
-# Создаем sr_nonru_basic.conf с заменой update-url
+echo "Создаем sr_nonru_basic.conf с заменой update-url"
 build_profile sr_nonru_basic
 
-# Создаем sr_ru_mini.conf с заменой update-url и проксированием портов и telegram
+echo "Создаем sr_ru_mini.conf с заменой update-url и проксированием портов и telegram"
 build_profile sr_ru_mini
 
-# Создаем sr_ru_extended.conf без update-url и с пустыми строками после [Rule]
+echo "Создаем sr_ru_extended.conf без update-url и с пустыми строками после [Rule]"
 build_profile sr_ru_extended
 
-# Создаем sr_ru_geo.conf
+echo "Создаем sr_ru_geo.conf"
 build_profile sr_ru_geo
