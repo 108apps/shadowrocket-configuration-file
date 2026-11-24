@@ -20,7 +20,8 @@ jobs:
 
       # --- Создание папок ---
       - name: Создаем папки для артефактов
-        run: bash -e source/build-scripts/prepare.sh
+        run: |
+          mkdir -p rules scripts modules conf
 
       - name: Генерируем domains_geo_detect.list
         run: bash -e source/build-scripts/domains_geo_detect.sh
