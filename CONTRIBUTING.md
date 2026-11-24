@@ -1,44 +1,44 @@
-# Где вносить изменения
+# CONTRIBUTING.md
 
-GitHub Actions берёт общие настройки из `source/General.txt`, добавляет правила из `.github/workflows/run.yml` и сохраняет готовые профили в `conf/`.
-
-- **Общие настройки профилей** меняйте в `source/General.txt`.
-- **Настройки одного профиля** меняйте в `.github/workflows/run.yml`.
-    - Найдите нужный шаг по имени профиля, например `sr_ru_whitelist.conf`.
-
-## Какие файлы перезаписывает сборка
-
-При каждой сборке GitHub Actions **перезаписываются** файлы в папках `conf/`, `modules/`, `rules/` и `scripts/`.
-
-Исключением являются три списка в `rules/`:
-
-- `domains_discord.list`
-- `domains_youtube.list`
-- `voice_ports.list`
-
-## Особенность форка
-
-Сборка скачивает `source/community.list` и `source/domains.list` из исходного репозитория.
-
-Чтобы использовать копии из своего форка, измените источник в `.github/workflows/run.yml`.
+Перед подготовкой pull request желательно ознакомиться с данным документом.
 
 ## Локальная сборка
 
-Из корня репозитория выполните `./build-local.sh`.<br>
-Скрипт последовательно запускает генераторы и перезаписывает файлы в `rules/`, `scripts/`, `modules/` и `conf/`.<br>
-Изменения можно посмотреть через `git diff`.
+Выполните команду `./build-local.sh`
 
-Для выборочной сборки передайте имена выходных каталогов, например `./build-local.sh rules` или `./build-local.sh scripts modules`. Допустимые группы — `rules`, `scripts`, `modules` и `conf`. Выбранные группы выполняются по одному разу в порядке полной сборки. Справка доступна по `./build-local.sh --help`.
+При каждой сборке **перезаписываются** файлы в папках `./conf`, `./modules`, `./rules` и `./scripts`.<br>
+В git изменения не фиксируется.
 
-Запускайте сборки по очереди. Генераторы используют общие временные файлы.
+Этапы сборки запускаются последовательно, т.к. используются общие временные файлы.
 
-Для полной сборки нужны интернет, Bash, curl, dig, jq, Python 3, GNU sed, GNU grep и gawk.
+Для выборочной сборки выполните:<br>
+`./build-local.sh conf`<br>
+`./build-local.sh modules`<br>
+`./build-local.sh rules`<br>
+`./build-local.sh scripts`<br>
 
-На macOS скрипт использует утилиты Homebrew.<br>
-Для установки недостающих компонентов выполните `brew install gnu-sed grep gawk jq`.
+При запуске `./build-local.sh conf` используется общий шаблон `./source/General.txt`
+
+Если на macOS ошибка выполнения `./build-local.sh`, установите недостающие компоненты `brew install gnu-sed grep gawk jq`.
 
 ### Сборка в Docker
 
 С запущенным Docker выполните `./build-local.sh --docker` для полной сборки или, например, `./build-local.sh --docker scripts modules` для выборочной.
 
-Команда собирает образ Ubuntu 24.04 LTS из `Dockerfile` и записывает результат в рабочую копию от имени текущего пользователя. Утилиты генерации устанавливаются внутри образа. При первой сборке образа нужен интернет.
+## Особенности сборки
+
+### #1
+Скачиваются файлы `source/community.list` и `source/domains.list` из ветки `main` оригинального репозитория.
+
+| Название файла          | Где присутствует хардкод                                                                                                | Что аффектит                  |
+|-------------------------|-------------------------------------------------------------------------------------------------------------------------|-------------------------------|
+| `source/community.list` | [domains_community.sh](source/build-scripts/domains_community.sh) и [sr_ru_mini.sh](source/build-scripts/sr_ru_mini.sh) | `./build-local.sh rules conf` |
+| `source/domains.list`   | [domain_ips.sh](source/build-scripts/domain_ips.sh)                                                                     | `./build-local.sh rules`      |
+
+### #2
+
+Следующие файлы не перезаписываются скриптами сборки:
+
+- `rules/domains_discord.list`
+- `rules/domains_youtube.list`
+- `rules/voice_ports.list`

@@ -65,7 +65,7 @@ export GITHUB_ENV="$temp/dates"
 # Подставляем версии Homebrew только для этого запуска.
 if [[ $(uname -s) == Darwin ]]; then
   if ! command -v brew >/dev/null; then
-    echo "Для сборки на macOS нужен Homebrew. См. раздел «Локальная сборка» в README.md." >&2
+    echo "Для сборки на macOS нужен Homebrew. См. раздел «Локальная сборка» в CONTRIBUTING.md." >&2
     exit 1
   fi
   prefix=$(brew --prefix)
@@ -85,19 +85,19 @@ if includes conf; then
 fi
 for tool in "${tools[@]}"; do
   if ! command -v "$tool" >/dev/null; then
-    echo "Отсутствует $tool. См. раздел «Локальная сборка» в README.md." >&2
+    echo "Отсутствует $tool. См. раздел «Локальная сборка» в CONTRIBUTING.md." >&2
     exit 1
   fi
 done
 if includes modules || includes conf; then
   if ! sed --version >/dev/null 2>&1; then
-    echo "Нужен GNU sed. См. README.md." >&2
+    echo "Нужен GNU sed. См. CONTRIBUTING.md." >&2
     exit 1
   fi
 fi
 if includes rules; then
   if ! grep -P '^ok$' <<< 'ok' >/dev/null 2>&1; then
-    echo "Нужен grep с поддержкой -P. См. README.md." >&2
+    echo "Нужен grep с поддержкой -P. См. CONTRIBUTING.md." >&2
     exit 1
   fi
   # Генераторы вызывают awk по короткому имени, но используют функции GNU awk.
