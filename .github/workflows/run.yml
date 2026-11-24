@@ -274,8 +274,8 @@ jobs:
 
 
       # --- Генерация конфигов ---
-      - name: Собираем профили Shadowrocket
-        run: ./build.sh conf
+      - name: Генерируем конфигурации Shadowrocket в каталоге conf/
+        run: BUILD_TIMING=false ./build-shadowrocket-conf.sh
 
       # --- Коммитим и пушим ---
       - name: Настраиваем git

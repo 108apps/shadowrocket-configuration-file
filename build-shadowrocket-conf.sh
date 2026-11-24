@@ -4,11 +4,9 @@
 # — флаг -u помогает заметить обращение к переменной, которой ещё не задали значение.
 set -eu
 
-# Принимаем только один аргумент со значением conf.
-if [[ $# -ne 1 || ${1:-} != conf ]]; then
-  # Пишем подсказку в поток ошибок (>&2). Код 2 означает ошибку в аргументах запуска.
-  echo "Использование: ./build.sh conf" >&2
-  exit 2
+# Замер времени сборки. Значение можно переопределить при запуске.
+if [[ -z ${BUILD_TIMING:-} ]]; then
+  BUILD_TIMING=true
 fi
 
 # $0 — путь к скрипту. Переходим в его каталог, чтобы найти source/ и conf/
@@ -40,16 +38,21 @@ mkdir -p conf
 
 now_ms() {
   local nanoseconds
-  nanoseconds=$(date +%s%N)
-  echo "$((nanoseconds / 1000000))"
+  nanoseconds=$(date +%s%N 2>/dev/null) || return 1
+  [[ $nanoseconds =~ ^[0-9]+$ ]] || return 1
+  echo "$((10#$nanoseconds / 1000000))"
 }
 
 build_profile() {
-  local start_ms end_ms
-  start_ms=$(now_ms)
+  local start_ms='' end_ms
+  if [[ $BUILD_TIMING == true ]]; then
+    start_ms=$(now_ms) || start_ms=''
+  fi
   bash -e "source/build-scripts/$1.sh"
-  end_ms=$(now_ms)
-  printf '  Время сборки: %d ms\n\n' "$((end_ms - start_ms))"
+  if [[ -n $start_ms ]] && end_ms=$(now_ms); then
+    printf '  Время сборки: %d ms\n' "$((end_ms - start_ms))"
+  fi
+  echo
 }
 
 # --- Генерация конфигов ---
