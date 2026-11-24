@@ -260,7 +260,6 @@ jobs:
 
       - name: Генерируем Certificate.module
         run: |
-          mkdir -p modules
           cat > modules/Certificate.module << 'EOF'
           #!name=Certificate Module
           [MITM]
@@ -268,32 +267,10 @@ jobs:
           ca-passphrase=${CA_PASSPHRASE}
           ca-p12=${CA_P12}
           EOF
-        env:
-          CA_PASSPHRASE: ${{ secrets.CA_PASSPHRASE }}
-          CA_P12: ${{ secrets.CA_P12 }}
-
 
       # --- Генерация конфигов ---
-      - name: Создаем sr_ru_basic.conf с заменой update-url в копии general
-        run: bash -e source/build-scripts/sr_ru_basic.sh
-
-      - name: Создаем sr_ru_whitelist.conf с заменой update-url в копии general
-        run: bash -e source/build-scripts/sr_ru_whitelist.sh
-
-      - name: Создаем sr_ru_keen.conf с заменой update-url в копии general
-        run: bash -e source/build-scripts/sr_ru_keen.sh
-
-      - name: Создаем sr_nonru_basic.conf с заменой update-url
-        run: bash -e source/build-scripts/sr_nonru_basic.sh
-
-      - name: Создаем sr_ru_mini.conf с заменой update-url и проксированием портов и telegram
-        run: bash -e source/build-scripts/sr_ru_mini.sh
-
-      - name: Создаем sr_ru_extended.conf без update-url и с пустыми строками после [Rule]
-        run: bash -e source/build-scripts/sr_ru_extended.sh
-
-      - name: Создаем sr_ru_geo.conf
-        run: bash -e source/build-scripts/sr_ru_geo.sh
+      - name: Собираем профили Shadowrocket
+        run: ./build-local.sh conf
 
       # --- Коммитим и пушим ---
       - name: Настраиваем git
@@ -304,7 +281,9 @@ jobs:
       - name: Добавляем и коммитим новые файлы
         run: |
           git add rules scripts modules conf
-          git commit -m "Auto: обновление сгенерированных файлы [skip ci]" || echo "No changes to commit"
+          if ! git diff --cached --quiet; then
+            git commit -m "Auto: обновление сгенерированных файлов [skip ci]"
+          fi
 
       - name: Пушим изменения в main
         run: git push origin main
