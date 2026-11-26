@@ -2,7 +2,8 @@ name: Sync fork with parent repository
 
 on:
   schedule:
-    - cron: '15 3 * * *'
+    - cron: '45 3 * * *'
+      timezone: 'Europe/Moscow'
   workflow_dispatch:
 
 permissions:
