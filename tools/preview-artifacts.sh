@@ -2,8 +2,8 @@
 # Останавливаем скрипт при ошибке команды, в том числе внутри конвейера, или при обращении к незаданной переменной.
 set -euo pipefail
 
-# Все пути ниже считаются от корня проекта, даже если скрипт вызвали из подпапки.
-cd "$(git rev-parse --show-toplevel)"
+# Относительные пути считаются от корня проекта, в котором лежит скрипт.
+cd "$(dirname "$0")/.."
 branch=$(git symbolic-ref --short HEAD)
 remote=$(git remote get-url origin)
 
@@ -25,7 +25,7 @@ if [[ -n $(git status --porcelain --untracked-files=all -- "${directories[@]}") 
 fi
 
 # GitHub собирает версию текущей ветки, которая уже отправлена в origin.
-run_url=$(gh workflow run build-preview-artifacts.yml --repo "$repo" --ref "$branch")
+run_url=$(gh workflow run build-artifacts.yml --repo "$repo" --ref "$branch")
 
 # Из ссылки вида …/actions/runs/123 извлекаем номер 123. Bash сохраняет совпадение из скобок в BASH_REMATCH[1].
 if [[ ! $run_url =~ /actions/runs/([0-9]+)/?$ ]]; then

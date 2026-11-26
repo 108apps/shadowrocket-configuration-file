@@ -272,4 +272,4 @@ runs:
     # --- Генерация конфигов ---
     - name: Генерируем конфигурации Shadowrocket в каталоге conf/
       shell: bash -e {0}
-      run: BUILD_TIMING=false ./build-shadowrocket-conf.sh
+      run: BUILD_TIMING=false ./tools/build-shadowrocket-conf.sh

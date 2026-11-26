@@ -1,4 +1,4 @@
-name: Build Shadowrocket preview artifacts
+name: Build Shadowrocket artifacts
 
 on:
   workflow_dispatch:

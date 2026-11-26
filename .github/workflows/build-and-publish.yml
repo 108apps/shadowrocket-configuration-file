@@ -37,7 +37,7 @@ jobs:
       - name: Добавляем и коммитим новые файлы
         run: |
           git add rules scripts modules conf
-          git commit -m "Auto: обновление сгенерированных файлы [skip ci]" || echo "No changes to commit"
+          git commit -m "Auto: обновление сгенерированных файлов [skip ci]" || echo "No changes to commit"
 
       - name: Пушим изменения в ветку запуска
         run: git push origin "HEAD:${GITHUB_REF}"
