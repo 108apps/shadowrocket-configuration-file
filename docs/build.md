@@ -12,11 +12,11 @@
 
 ## Полная сборка через GitHub Actions
 
-`./tools/preview-artifacts.sh`
+`./tools/build-artifacts.sh`
 
 Скрипт через `gh` запускает `build-artifacts.yml` для текущей ветки в `origin`. Перед запуском закоммитьте и отправьте изменения, которые хотите проверить, и учтите [источники доменных списков](#источники-доменных-списков).
 
-После сборки скрипт копирует файлы из артефакта `shadowrocket-files` в `conf/`, `modules/`, `rules/` и `scripts/` и выводит `git status --short` и `git diff`.
+После сборки скрипт копирует файлы из артефакта `shadowrocket-files` в `conf/`, `modules/`, `rules/` и `scripts/` и выводит `git status --short` для этих папок.
 
 Если в этих папках есть незакоммиченные изменения или неотслеживаемые файлы, скрипт остановится до запуска сборки.
 
@@ -25,7 +25,7 @@
 Исходный репозиторий для этих списков — `misha-tgshv/shadowrocket-configuration-file`.
 
 - При локальной сборке и в CI генератор `sr_ru_mini.conf` скачивает `source/community.list` из ветки `main` исходного репозитория.
-- Для `domains_community.list` и `domain_ips.list` CI скачивает соответственно `source/community.list` и `source/domains.list` из той же ветки. Предпросмотр в форке использует эти версии списков даже после отправки изменений в ветку форка.
+- Для `domains_community.list` и `domain_ips.list` CI скачивает соответственно `source/community.list` и `source/domains.list` из той же ветки. Сборка в форке использует эти версии списков даже после отправки изменений в ветку форка.
 
 ## Списки, которые сохраняются при сборке
 

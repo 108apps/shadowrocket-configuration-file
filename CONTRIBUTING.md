@@ -19,7 +19,7 @@
 Запускает сборку в GitHub Actions для версии текущей ветки в `origin` и скачивает артефакты в рабочую копию.
 
 ```bash
-./tools/preview-artifacts.sh
+./tools/build-artifacts.sh
 ```
 
 ## Подробная инструкция

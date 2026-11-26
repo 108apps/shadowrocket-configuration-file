@@ -55,4 +55,4 @@ done
 
 # status покажет и новые файлы, а diff — изменения в уже отслеживаемых файлах.
 git status --short -- "${directories[@]}"
-git diff -- "${directories[@]}"
+# git diff -- "${directories[@]}"
