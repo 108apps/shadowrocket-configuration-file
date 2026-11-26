@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -16,7 +16,7 @@ jobs:
         uses: ./.github/actions/build-shadowrocket-files
 
       - name: Сохраняем файлы в артефакт
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: shadowrocket-files
           path: |
