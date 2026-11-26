@@ -108,7 +108,7 @@ require_original_checkout
 git add -- "${directories[@]}"
 artifact_changes=$(git diff --cached --name-only -- "${directories[@]}")
 if [[ -n $artifact_changes ]]; then
-  git commit --only -m "build: update Shadowrocket artifacts" -- "${directories[@]}"
+  git commit --only -m "Manual: обновление сгенерированных файлов [skip ci]" -- "${directories[@]}"
 else
   echo "Artifacts are unchanged."
 fi
