@@ -11,14 +11,18 @@ on:
 
 jobs:
   build_and_publish:
-    # Автоматически генерируем и публикуем правила только в основном репозитории.
-    # if: github.repository == 'misha-tgshv/shadowrocket-configuration-file'
+    if: >-
+      github.ref_type == 'branch'
+      && (github.event_name == 'workflow_dispatch'
+          || ((github.event_name == 'schedule' || github.event_name == 'push')
+              && github.repository == 'misha-tgshv/shadowrocket-configuration-file'))
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout main
+      - name: Checkout triggering commit
         uses: actions/checkout@v5
         with:
-          ref: main
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Shadowrocket files
@@ -35,7 +39,5 @@ jobs:
           git add rules scripts modules conf
           git commit -m "Auto: обновление сгенерированных файлы [skip ci]" || echo "No changes to commit"
 
-      - name: Пушим изменения в main
-        run: git push origin main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Пушим изменения в ветку запуска
+        run: git push origin "HEAD:${GITHUB_REF}"
