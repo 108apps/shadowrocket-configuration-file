@@ -4,7 +4,7 @@
 
 Установка: `brew install actionlint`
 
-Валидация: `actionlint` 
+Валидация: `actionlint`
 
 # Локальная сборка conf/
 
