@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 jobs:
-  sync:
+  sync-fork:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     env:
@@ -23,11 +23,3 @@ jobs:
             --method POST \
             repos/${{ github.repository }}/merge-upstream \
             -f branch=main
-
-#      - name: Merge main into 'main-with-fork-ci' branch
-#        run: |
-#          gh api \
-#            --method POST \
-#            repos/${{ github.repository }}/merges \
-#            -f base=main-with-fork-ci \
-#            -f head=main
