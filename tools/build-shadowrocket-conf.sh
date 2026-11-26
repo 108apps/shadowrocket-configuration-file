@@ -9,12 +9,11 @@ if [[ -z ${BUILD_TIMING:-} ]]; then
   BUILD_TIMING=true
 fi
 
-# $0 — путь к скрипту. Переходим в его каталог, чтобы найти source/ и conf/
-# даже при запуске из другой папки.
-cd "$(dirname "$0")"
+# Относительные пути к source/ и conf/ считаются от корня проекта.
+cd "$(dirname "$0")/.."
 
 # macOS workaround @begin
-# если доступен Homebrew, ставим каталог GNU sed первым в PATH, чтобы build-scripts нашли его раньше системного sed.
+# если доступен Homebrew, ставим каталог GNU sed первым в PATH для генераторов профилей.
 if [[ $(uname -s) == Darwin ]] && command -v brew >/dev/null; then
   export PATH="$(brew --prefix)/opt/gnu-sed/libexec/gnubin:$PATH"
 fi
@@ -48,7 +47,7 @@ build_profile() {
   if [[ $BUILD_TIMING == true ]]; then
     start_ms=$(now_ms) || start_ms=''
   fi
-  bash -e "source/build-scripts/$1.sh"
+  bash -e "tools/profiles/$1.sh"
   if [[ -n $start_ms ]] && end_ms=$(now_ms); then
     printf '  Время сборки: %d ms\n' "$((end_ms - start_ms))"
   fi

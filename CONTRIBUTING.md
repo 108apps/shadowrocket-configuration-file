@@ -1,27 +1,42 @@
 # CONTRIBUTING.md
 
-## Валидация ./github/*.yml локально на машине
+## Static checker for GitHub Actions workflow files
 
 Установка: `brew install actionlint`
 
 Валидация: `actionlint`
 
-# Локальная сборка conf/
+## Локальная сборка `conf/`
 
-Команда `./build-shadowrocket-conf.sh` собирает все профили в `conf/`.
+`./tools/build-shadowrocket-conf.sh`
 
-Генераторы профилей находятся в `source/build-scripts/sr_*.sh` и используют общий шаблон `source/General.txt`.<br>
-Они запускаются последовательно, поскольку используют общий временный файл.
+Скрипты `tools/profiles/sr_*.sh` запускаются последовательно, используют шаблон `source/General.txt` из рабочей копии и перезаписывают одноимённые профили в `conf/`.
 
-### Особенности проекта
+## Полная сборка через GitHub Actions
 
-#1<br>
-Для профиля `sr_ru_mini.conf` скрипт скачивает `source/community.list` из ветки `main` исходного репозитория.
+`./tools/preview-artifacts.sh`
 
-#2<br>
+Скрипт через `gh` запускает `build-artifacts.yml` для текущей ветки в `origin`. Перед запуском закоммитьте и отправьте изменения, которые хотите проверить, и учтите [источники доменных списков](#источники-доменных-списков).
+
+После сборки скрипт копирует файлы из артефакта `shadowrocket-files` в `conf/`, `modules/`, `rules/` и `scripts/` и выводит `git status --short` и `git diff`.
+
+Если в этих папках есть незакоммиченные изменения или неотслеживаемые файлы, скрипт остановится до запуска сборки.
+
+## Особенности сборки
+
+[Известные проблемы сборки](BUILD_ISSUES.md) описаны отдельно.
+
+### Источники доменных списков
+
+Исходный репозиторий для этих списков — `misha-tgshv/shadowrocket-configuration-file`.
+
+- При локальной сборке и в CI генератор `sr_ru_mini.conf` скачивает `source/community.list` из ветки `main` исходного репозитория.
+- Для `domains_community.list` и `domain_ips.list` CI скачивает соответственно `source/community.list` и `source/domains.list` из той же ветки. Предпросмотр в форке использует эти версии списков даже после отправки изменений в ветку форка.
+
+### Списки, которые сохраняются при сборке
+
 Следующие файлы не перезаписываются скриптами сборки:
 
 - `rules/domains_discord.list`
 - `rules/domains_youtube.list`
 - `rules/voice_ports.list`
-
