@@ -1,4 +1,4 @@
-name: Generate shadowrocket artifacts
+name: Build Shadowrocket preview artifacts
 
 on:
   workflow_dispatch:
@@ -12,8 +12,8 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Generate Shadowrocket files
-        uses: ./.github/actions/generate-shadowrocket
+      - name: Build Shadowrocket files
+        uses: ./.github/actions/build-shadowrocket-files
 
       - name: Сохраняем файлы в артефакт
         uses: actions/upload-artifact@v4

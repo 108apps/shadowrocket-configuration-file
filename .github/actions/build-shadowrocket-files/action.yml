@@ -1,4 +1,4 @@
-name: Generate Shadowrocket files
+name: Build Shadowrocket files
 description: Generate routing rules, scripts, modules, and configuration profiles.
 runs:
   using: composite
