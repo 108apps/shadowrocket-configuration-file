@@ -5,9 +5,13 @@ set -euo pipefail
 
 echo "Starting Shadowrocket artifact build..."
 
-# Относительные пути считаются от корня проекта, в котором лежит скрипт.
-cd "$(dirname "$0")/.."
-branch_ref=$(git symbolic-ref HEAD)
+# Относительные пути считаются от корня проекта.
+# realpath раскрывает символическую ссылку на скрипт, а git rev-parse находит корень репозитория.
+cd "$(git -C "$(dirname "$(realpath "$0")")" rev-parse --show-toplevel)"
+if ! branch_ref=$(git symbolic-ref --quiet HEAD); then
+  echo "Check out a branch first: HEAD is detached." >&2
+  exit 1
+fi
 branch=${branch_ref#refs/heads/}
 local_sha=$(git rev-parse HEAD)
 remote=$(git remote get-url origin)
