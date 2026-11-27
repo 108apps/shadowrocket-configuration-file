@@ -1,0 +1,27 @@
+name: Build Shadowrocket artifacts
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build_artifacts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Shadowrocket files
+        uses: ./.github/actions/build-shadowrocket-files
+
+      - name: Сохраняем файлы в артефакт
+        uses: actions/upload-artifact@v6
+        with:
+          name: shadowrocket-files
+          path: |
+            rules/
+            scripts/
+            modules/
+            conf/
+          if-no-files-found: error

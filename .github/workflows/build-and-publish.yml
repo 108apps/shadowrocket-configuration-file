@@ -1,0 +1,43 @@
+name: Build and publish Shadowrocket files
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 3 * * *"
+      timezone: 'Europe/Moscow'
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_publish:
+    if: >-
+      github.ref_type == 'branch'
+      && (github.event_name == 'workflow_dispatch'
+          || ((github.event_name == 'schedule' || github.event_name == 'push')
+              && github.repository == 'misha-tgshv/shadowrocket-configuration-file'))
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout triggering commit
+        uses: actions/checkout@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Shadowrocket files
+        uses: ./.github/actions/build-shadowrocket-files
+
+      # --- Коммитим и пушим ---
+      - name: Настраиваем git
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Добавляем и коммитим новые файлы
+        run: |
+          git add rules scripts modules conf
+          git commit -m "Auto: обновление сгенерированных файлов [skip ci]" || echo "No changes to commit"
+
+      - name: Пушим изменения в ветку запуска
+        run: git push origin "HEAD:${GITHUB_REF}"
